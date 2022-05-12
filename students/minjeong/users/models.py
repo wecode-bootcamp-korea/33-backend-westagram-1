@@ -7,8 +7,8 @@ class User(models.Model):
     password    = models.CharField(max_length=100)
     phonenumber = models.CharField(max_length=45, blank=True)
     personal    = models.CharField(max_length=45, blank=True)
-    created_at  = models.DateTimeField(auto_now_add=True)
-    updated_at  = models.DateTimeField(auto_now_add=True)
+    created_at  = models.DateTimeField(auto_now=True)
+    updated_at  = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table='user'
