@@ -10,7 +10,6 @@ class UsersView(View):
         data = json.loads(request.body)
 
 
-        
 
         User.objects.create(
             name = data['name'],
