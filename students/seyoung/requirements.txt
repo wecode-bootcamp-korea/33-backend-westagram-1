@@ -1,7 +1,4 @@
-# requirements.txt
-Django==3.2.4
-django-cors-headers==3.7.0
-mysqlclient==2.0.3
-    
-# m1의 경우 아래 패키지도 추가해주세요.
-PyMySQL==1.0.2
+Django==4.0.4
+django-cors-headers==3.12.0
+django-extensions==3.1.5
+mysqlclient==2.1.0
