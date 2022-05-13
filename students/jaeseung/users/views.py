@@ -16,30 +16,24 @@ class SignUpView(View):
             password = data['password']
             contact  = data['contact']
 
-            # #Regex of email & password
             email_regex    = '^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
             password_regex = '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$'
             
-            # #Email Validation
             if not re.match(email_regex, email):
                 return JsonResponse({"message": "INVALID_EMAIL"}, status=400)
 
-            # #Password Validation
             if not re.match(password_regex, password):
                 return JsonResponse({"message": "INVALID_PASSWORD"}, status=400)
             
-            #Case(Email already exists)
             if User.objects.filter(email = email).exists():
                 return JsonResponse({"message": "EMAIL_IS_ALREADY_REGISTERED"}, status=400)
 
-            #Insert Data
             User.objects.create(
                 name     = name,
                 email    = email,
                 password = password,
                 contact  = contact
             )
-            
             return JsonResponse({"message": "SUCCESS"}, status=201)
 
         except KeyError: 
