@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from django.views import View
-from django.http import JsonResponse
+from django.shortcuts   import render
+from django.views       import View
+from django.http        import JsonResponse
 
 import json
 import re
 
-from .models import User
+from .models            import User
 
 
 class SignupView(View):
