@@ -42,4 +42,4 @@ class SignupView(View):
             return JsonResponse({"message" : "SUCCESS"}, status=201)
 
         except KeyError :
-                return JsonResponse({"message" : "WRONG_FIELD_NAME"}, status=400)
+                return JsonResponse({"message" : "KEY_ERROR"}, status=400)
