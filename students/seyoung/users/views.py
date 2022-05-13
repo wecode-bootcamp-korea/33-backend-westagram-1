@@ -36,12 +36,12 @@ class UserSignUpView(View):
         except KeyError:
             return JsonResponse({"message": "KEY_ERROR"}, status=400)
 
-        user = User.objects.create(
+        User.objects.create(
                 name          = input_name,
                 email         = input_email,
                 password      = input_password,
                 mobile_number = input_mobile,
                 date_of_birth = input_birthdate,
-            )
+        )
 
         return JsonResponse({"message": "SUCCESS"}, status=201)
