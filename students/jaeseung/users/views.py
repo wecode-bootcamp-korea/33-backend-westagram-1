@@ -17,8 +17,8 @@ class SignUpView(View):
             contact  = data['contact']
 
             #Regex of email & password
-            email_regex    = "^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-            password_regex = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$"
+            email_regex    = '^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+            password_regex = '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$'
             
             #Email Validation
             if re.match(email_regex, str(email)) == None:
@@ -30,7 +30,7 @@ class SignUpView(View):
             
             #Case(Email already exists)
             if User.objects.filter(email = email).exists(): 
-                return JsonResponse({"message": "EMAIL_IS_ALREADY_REGISTERED"})
+                return JsonResponse({"message": "EMAIL_IS_ALREADY_REGISTERED"}, status=400)
 
             #Insert Data
             User.objects.create(
