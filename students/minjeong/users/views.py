@@ -9,9 +9,7 @@ from .models            import User
 
 
 class SignupView(View):
-
     def post(self, request):
-        
         try:
             data        = json.loads(request.body)
 
@@ -39,12 +37,9 @@ class SignupView(View):
                 name        = name,
                 phonenumber = phonenumber,
                 personal    = personal
-                )
+            )
 
             return JsonResponse({"message" : "SUCCESS"}, status=201)
 
         except KeyError :
                 return JsonResponse({"message" : "WRONG_FIELD_NAME"}, status=400)
-
-        except Exception as e :
-            return JsonResponse({"message" : e}, status=400)
