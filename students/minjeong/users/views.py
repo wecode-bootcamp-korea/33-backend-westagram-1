@@ -9,26 +9,35 @@ from .models            import User
 
 
 class SignupView(View):
-    def post(self,request):
-        input_data=json.loads(request.body)
-        a = re.match('(\w|\W)+@{1}\w+\.(\w|\W)+', input_data["email"])
-        b = re.match('^.*(?=^.{8,}$)(?=.*\d)(?=.*[a-z|A-Z|가-핳])(?=.*\W).*$',input_data["password"])
+    def post(self, request):
+        
+        try:
+            data    = json.loads(request.body)
 
-        data=input_data
+            if not re.match('(\w|\W)+@{1}\w+\.(\w|\W)+', data["email"]) and not re.match('^.*(?=^.{8,}$)(?=.*\d)(?=.*[a-z|A-Z|가-핳])(?=.*\W).*$', data["password"]):
+                return JsonResponse({"message" : "INVALID_EMAIL_PASSWORD"}, status=400)
 
-        if a==None and b==None:
-            return JsonResponse({"message": "@과.이 포함된 이메일 형식이 필요합니다,8자리 이상, 문자, 숫자, 특수문자의 복합이어야 합니다"}, status=400)
-        elif a==None:
-            return JsonResponse({"message": "@과.이 포함된 이메일 형식이 필요합니다"}, status=400)
-        elif b==None:
-            return JsonResponse({"message":"비밀번호는 8자리 이상, 문자, 숫자, 특수문자의 복합이어야 합니다"}, status=400)
-        else:
+            if not re.match('(\w|\W)+@{1}\w+\.(\w|\W)+', data["email"]):
+                return JsonResponse({"message" : "INVALID_EMAIL"}, status=400)
+
+            if not re.match('^.*(?=^.{8,}$)(?=.*\d)(?=.*[a-z|A-Z|가-핳])(?=.*\W).*$', data["password"]):
+                return JsonResponse({"message" : "INVALID_PASSWORD"}, status=400)
+            
+            if User.objects.filter(email=data["email"]):
+                return JsonResponse({"messages" : "EMAIL_EXIST"}, status=400)
+           
             User.objects.create(
-                    email       = data["email"],
-                    password    = data["password"],
-                    name        = data["name"],
-                    phonenumber = data["phonenumber"],
-                    personal    = data["personal"]
-                )
-        return JsonResponse({"message" : "SUCCESS"}, status=201)
-       
+                email       = data["email"],
+                password    = data["password"],
+                name        = data["name"],
+                phonenumber = data["phonenumber"],
+                personal    = data["personal"]
+                            )
+
+            return JsonResponse({"message" : "SUCCESS"}, status=201)
+
+        except KeyError :
+                return JsonResponse({"message" : "WRONG_FIELD_NAME"}, status=400)
+
+        except Exception as E :
+            return JsonResponse({"message" : E}, status=400)
