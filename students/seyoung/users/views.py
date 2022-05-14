@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 import json
 import re
 
@@ -21,7 +22,8 @@ class UserSignUpView(View):
             input_mobile    = input_data["mobile_number"]
             input_birthdate = input_data["date_of_birth"]
                 
-            if not re.match(REGEX_EMAIL, input_email) or User.objects.filter(email=input_email).exists():
+            if not re.match(REGEX_EMAIL, input_email) or \
+                User.objects.filter(email=input_email).exists():
                 return JsonResponse({"message": "INVALID_EMAIL"}, status=400)
 
             if not re.match(REGEX_PASSWORD, input_password):
@@ -60,5 +62,7 @@ class UserSignInView(View):
         except KeyError:
             return JsonResponse({"message": "KEY_ERROR"}, status=400)
 
-        return JsonResponse({"message": "SUCCESS"}, status=200)
+        except JSONDecodeError:
+            return JsonResponse({'message':'JSON_DECODE_ERROR'}, status=400)
 
+        return JsonResponse({"message": "SUCCESS"}, status=200)
