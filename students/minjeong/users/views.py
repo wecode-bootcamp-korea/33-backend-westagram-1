@@ -39,7 +39,7 @@ class SignupView(View):
                 personal    = personal
             )
 
-            return JsonResponse({"message" : "SUCCESS"}, status=201)
+            return JsonResponse({"message" : "SUCCESS"}, status=200)
 
         except KeyError :
                 return JsonResponse({"message" : "KEY_ERROR"}, status=400)
@@ -56,9 +56,9 @@ class LoginView(View):
                 return JsonResponse({"messages" : "INVALID_USER"}, status=400)
            
             if User.objects.filter(email = email).exists() and User.objects.get(email = email).password != password:
-                return JsonResponse({"messages" : "INVALID_PASSWORD"})
+                return JsonResponse({"messages" : "INVALID_PASSWORD"}, status=400)
 
-            return JsonResponse({"message" : "SUCCESS"}, status=201)
+            return JsonResponse({"message" : "SUCCESS"}, status=200)
 
         except KeyError :
                 return JsonResponse({"message" : "KEY_ERROR"}, status=400)
