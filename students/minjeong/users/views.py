@@ -63,4 +63,4 @@ class LoginView(View):
             return JsonResponse({"message" : "KEY_ERROR"}, status=400)
         
         except User.DoesNotExist:
-            return JsonResponse({"message" : "INVALID_ID"}, status=400)
+            return JsonResponse({"message" : "INVALID_EMAIL"}, status=400)
