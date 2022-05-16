@@ -6,10 +6,10 @@ from django.views import View
 
 from .models import User
 
-REGEX_EMAIL     = '^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-REGEX_PASSWORD  = '^(?=.{8,16}$)(?=.*[a-z])(?=.*[0-9]).*$'
-REGEX_MOBILE    = '\d{3}-\d{3,4}-\d{4}'
-REGEX_BIRTHDATE = '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
+REGEX_EMAIL     = "^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+REGEX_PASSWORD  = "^(?=.{8,16}$)(?=.*[a-z])(?=.*[0-9]).*$"
+REGEX_MOBILE    = "\d{3}-\d{3,4}-\d{4}"
+REGEX_BIRTHDATE = "^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
 
 class UserSignUpView(View):
     def post(self, request):
@@ -20,8 +20,9 @@ class UserSignUpView(View):
             input_password  = input_data["password"]
             input_mobile    = input_data["mobile_number"]
             input_birthdate = input_data["date_of_birth"]
-                
-            if not re.match(REGEX_EMAIL, input_email) or User.objects.filter(email=input_email).exists():
+
+            if not re.match(REGEX_EMAIL, input_email) or \
+                User.objects.filter(email=input_email).exists():
                 return JsonResponse({"message": "INVALID_EMAIL"}, status=400)
 
             if not re.match(REGEX_PASSWORD, input_password):
@@ -45,3 +46,21 @@ class UserSignUpView(View):
         )
 
         return JsonResponse({"message": "SUCCESS"}, status=201)
+
+class UserSignInView(View):
+    def post(self, request):
+        try:
+            input_data     = json.loads(request.body)
+            input_email    = input_data["email"]
+            input_password = input_data["password"]
+        
+            if not User.objects.filter(email = input_email, password = input_password).exists():
+                return JsonResponse({"message": "INVALID_USER"}, status=401)
+            
+        except KeyError:
+            return JsonResponse({"message": "KEY_ERROR"}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"message": "JSON_DECODE_ERROR"}, status=400)
+
+        return JsonResponse({"message": "SUCCESS"}, status=200)
