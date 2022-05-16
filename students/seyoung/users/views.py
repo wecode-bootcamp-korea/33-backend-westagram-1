@@ -53,7 +53,7 @@ class UserSignInView(View):
             input_data     = json.loads(request.body)
             input_email    = input_data["email"]
             input_password = input_data["password"]
-            
+        
             if not User.objects.filter(email = input_email, password = input_password).exists():
                 return JsonResponse({"message": "INVALID_USER"}, status=401)
             
@@ -61,6 +61,6 @@ class UserSignInView(View):
             return JsonResponse({"message": "KEY_ERROR"}, status=400)
 
         except json.JSONDecodeError:
-            return JsonResponse({"message": "NO_INPUT_DATA"}, status=400)
+            return JsonResponse({"message": "JSON_DECODE_ERROR"}, status=400)
 
         return JsonResponse({"message": "SUCCESS"}, status=200)
