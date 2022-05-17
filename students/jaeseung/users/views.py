@@ -1,5 +1,6 @@
 import json
 import re
+import bcrypt
 
 from django.http import JsonResponse
 from django.views import View
@@ -31,7 +32,7 @@ class SignUpView(View):
             User.objects.create(
                 name     = name,
                 email    = email,
-                password = password,
+                password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
                 contact  = contact
             )
             return JsonResponse({"message": "SUCCESS"}, status=201)
@@ -54,4 +55,3 @@ class SignInView(View):
             
         except KeyError: 
             return JsonResponse({"message": "KEY_ERROR"}, status=400)
-        
