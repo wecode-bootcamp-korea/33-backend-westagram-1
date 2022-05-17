@@ -3,9 +3,9 @@ import re
 import bcrypt
 import jwt
 
-from django.http import JsonResponse
+from django.http  import JsonResponse
 from django.views import View
-from django.conf import settings
+from django.conf  import settings
 
 from users.models import User
 
