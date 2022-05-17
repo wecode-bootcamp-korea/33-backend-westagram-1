@@ -59,8 +59,8 @@ class LoginView(View):
 
             user = User.objects.get(email = email)
 
-            if user.password != password:
-                return JsonResponse({"messages" : "INVALID_PASSWORD"}, status=400)
+            if not(bcrypt.checkpw(password,db_password)):
+                return JsonResponse({"messages" : "NOT_MATCH_PASSWORD"}, status=400)
 
             id           = User.objects.get(email=email).id
             access_token = jwt.encode({'id' : id}, SECRET_KEY, algorithm = ALGORITHM)
