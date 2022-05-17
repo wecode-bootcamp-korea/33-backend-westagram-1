@@ -61,8 +61,7 @@ class UserSignInView(View):
             input_password = input_data["password"]
             user           = User.objects.get(email = input_email)
         
-            if not User.objects.filter(email=input_email).exists() or \
-            not bcrypt.checkpw(input_password.encode("utf-8"), user.password.encode("utf-8")):
+            if not bcrypt.checkpw(input_password.encode("utf-8"), user.password.encode("utf-8")):
                 return JsonResponse({"message": "INVALID_USER"}, status=401)
 
         except KeyError:
@@ -70,6 +69,9 @@ class UserSignInView(View):
 
         except json.JSONDecodeError:
             return JsonResponse({"message": "JSON_DECODE_ERROR"}, status=400)
+
+        except User.DoesNotExist:
+            return JsonResponse({"message": "INVALID_USER"}, status=401)
 
         access_token = jwt.encode({"id": user.id}, settings.SECRET_KEY, algorithm = settings.ALGORITHM)
         return JsonResponse({"message": "SUCCESS", "ACCESS_TOKEN": access_token}, status=200)
