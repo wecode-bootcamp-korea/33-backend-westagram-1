@@ -7,9 +7,9 @@ import re
 import bcrypt
 import jwt
 
-from .models            import User
-from my_settings        import SECRET_KEY
-from my_settings        import ALGORITHM
+from .models                      import User
+from westagram.settings           import SECRET_KEY, ALGORITHM
+
 
 class SignupView(View):
     def post(self, request):
@@ -52,18 +52,19 @@ class SignupView(View):
 class LoginView(View):
     def post(self, request):
         try:
-            data     = json.loads(request.body)
+            data = json.loads(request.body)
     
             email    = data["email"]
-            password = data["password"]
+            password = data["password"].encode('utf-8')
 
-            user = User.objects.get(email = email)
+            user        = User.objects.get(email = email)
+            db_password = user.password.encode('utf-8')
 
-            if not(bcrypt.checkpw(password,db_password)):
+            if not bcrypt.checkpw(password,db_password):
                 return JsonResponse({"messages" : "NOT_MATCH_PASSWORD"}, status=400)
 
-            id           = User.objects.get(email=email).id
-            access_token = jwt.encode({'id' : id}, SECRET_KEY, algorithm = ALGORITHM)
+            user_id           = user.id
+            access_token = jwt.encode({'id' : user_id}, SECRET_KEY, algorithm = ALGORITHM)
 
             return JsonResponse({"SUCCESS, ACCESS_TOKEN" : access_token}, status=200)
 
