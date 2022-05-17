@@ -1,5 +1,6 @@
 import json
 import re
+import bcrypt
 
 from django.http  import JsonResponse
 from django.views import View
@@ -21,6 +22,9 @@ class UserSignUpView(View):
             input_mobile    = input_data["mobile_number"]
             input_birthdate = input_data["date_of_birth"]
 
+            hashed_password  = bcrypt.hashpw(input_password.encode("utf-8"), \
+                bcrypt.gensalt()).decode("utf-8")
+
             if not re.match(REGEX_EMAIL, input_email) or \
                 User.objects.filter(email=input_email).exists():
                 return JsonResponse({"message": "INVALID_EMAIL"}, status=400)
@@ -40,7 +44,7 @@ class UserSignUpView(View):
         User.objects.create(
                 name          = input_name,
                 email         = input_email,
-                password      = input_password,
+                password      = hashed_password,
                 mobile_number = input_mobile,
                 date_of_birth = input_birthdate,
         )
