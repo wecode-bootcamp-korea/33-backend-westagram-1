@@ -14,13 +14,13 @@ class UsersView(View):
       email        = input_data["email"]
       password     = input_data["password"]
       phone        = input_data["phone"]
-      rex_email    = "^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-      rex_password = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"
+      REX_EMAIL    = "^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+      REX_PASSWORD = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"
 
-      if re.match(rex_email, email) == None:
+      if re.match(REX_EMAIL, email) == None:
         return JsonResponse({'message': 'Invalid_email'}, status = 400)
       
-      if re.match(rex_password, password) == None:
+      if re.match(REX_PASSWORD, password) == None:
         return JsonResponse({'message': 'Invalid_password'}, status = 400)
 
       if User.objects.filter(email = email).exists():
