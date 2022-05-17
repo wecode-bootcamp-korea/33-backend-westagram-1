@@ -9,7 +9,7 @@ import jwt
 
 from .models                      import User
 from westagram.settings           import SECRET_KEY, ALGORITHM
-
+from django.conf import settings
 
 class SignupView(View):
     def post(self, request):
@@ -60,11 +60,11 @@ class LoginView(View):
             user        = User.objects.get(email = email)
             db_password = user.password.encode('utf-8')
 
-            if not bcrypt.checkpw(password,db_password):
+            if not bcrypt.checkpw(password, db_password):
                 return JsonResponse({"messages" : "NOT_MATCH_PASSWORD"}, status=400)
 
             user_id           = user.id
-            access_token = jwt.encode({'id' : user_id}, SECRET_KEY, algorithm = ALGORITHM)
+            access_token      = jwt.encode({'id' : user_id}, SECRET_KEY, algorithm = ALGORITHM)
 
             return JsonResponse({"SUCCESS, ACCESS_TOKEN" : access_token}, status=200)
 
