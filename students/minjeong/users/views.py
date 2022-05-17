@@ -5,9 +5,11 @@ from django.http        import JsonResponse
 import json
 import re
 import bcrypt
+import jwt
 
 from .models            import User
-
+from my_settings        import SECRET_KEY
+from my_settings        import ALGORITHM
 
 class SignupView(View):
     def post(self, request):
@@ -60,7 +62,11 @@ class LoginView(View):
             if user.password != password:
                 return JsonResponse({"messages" : "INVALID_PASSWORD"}, status=400)
 
-            return JsonResponse({"message" : "SUCCESS"}, status=200)
+            id           = User.objects.get(email=email).id
+            access_token = jwt.encode({'id' : id}, SECRET_KEY, algorithm = ALGORITHM)
+
+
+            return JsonResponse({"ACCESS_TOKEN" : access_token}, status=200)
 
         except KeyError :
             return JsonResponse({"message" : "KEY_ERROR"}, status=400)
