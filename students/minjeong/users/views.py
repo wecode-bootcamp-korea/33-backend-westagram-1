@@ -5,9 +5,10 @@ from django.http        import JsonResponse
 import json
 import re
 import bcrypt
+import jwt
 
-from .models            import User
-
+from .models                      import User
+from django.conf                  import settings
 
 class SignupView(View):
     def post(self, request):
@@ -50,17 +51,21 @@ class SignupView(View):
 class LoginView(View):
     def post(self, request):
         try:
-            data     = json.loads(request.body)
+            data = json.loads(request.body)
     
             email    = data["email"]
-            password = data["password"]
+            password = data["password"].encode('utf-8')
 
-            user = User.objects.get(email = email)
+            user        = User.objects.get(email = email)
+            db_password = user.password.encode('utf-8')
 
-            if user.password != password:
-                return JsonResponse({"messages" : "INVALID_PASSWORD"}, status=400)
+            if not bcrypt.checkpw(password, db_password):
+                return JsonResponse({"messages" : "NOT_MATCH_PASSWORD"}, status=400)
 
-            return JsonResponse({"message" : "SUCCESS"}, status=200)
+            user_id           = user.id
+            access_token      = jwt.encode({'id' : user_id}, settings.SECRET_KEY, algorithm = settings.ALGORITHM)
+
+            return JsonResponse({"SUCCESS, ACCESS_TOKEN" : access_token}, status=200)
 
         except KeyError :
             return JsonResponse({"message" : "KEY_ERROR"}, status=400)
