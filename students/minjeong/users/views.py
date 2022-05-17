@@ -3,7 +3,6 @@ import re
 import bcrypt
 import jwt
 
-from django.shortcuts   import render
 from django.views       import View
 from django.http        import JsonResponse
 from django.conf        import settings
@@ -64,7 +63,10 @@ class LoginView(View):
 
             access_token      = jwt.encode({'id' : user_id}, settings.SECRET_KEY, algorithm = settings.ALGORITHM)
 
-            return JsonResponse({"SUCCESS, ACCESS_TOKEN" : access_token}, status=200)
+            return JsonResponse({
+                "message"      : "success",
+                "access_token" : access_token
+            }, status=200)
 
         except KeyError :
             return JsonResponse({"message" : "KEY_ERROR"}, status=400)
