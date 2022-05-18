@@ -14,8 +14,8 @@ class SignupView(View):
         try:
             data        = json.loads(request.body)
 
-            email       = data["email"]
-            password    = data["password"]
+            email       = data["id"]
+            password    = data["pw"]
             name        = data["name"]
             phonenumber = data["phonenumber"]
             personal    = data["personal"]
@@ -52,8 +52,8 @@ class LoginView(View):
         try:
             data = json.loads(request.body)
     
-            email    = data["email"]
-            password = data["password"].encode('utf-8')
+            email    = data["id"]
+            password = data["pw"].encode('utf-8')
 
             user        = User.objects.get(email = email)
             db_password = user.password.encode('utf-8')
@@ -61,7 +61,7 @@ class LoginView(View):
             if not bcrypt.checkpw(password, db_password):
                 return JsonResponse({"messages" : "NOT_MATCH_PASSWORD"}, status=400)
 
-            access_token      = jwt.encode({'id' : user_id}, settings.SECRET_KEY, algorithm = settings.ALGORITHM)
+            access_token      = jwt.encode({'id' : user.id}, settings.SECRET_KEY, algorithm = settings.ALGORITHM)
 
             return JsonResponse({
                 "message"      : "success",
