@@ -43,7 +43,7 @@ class UsersView(View):
 
 
 class LoginView(View):
-  
+
   def post(self, request):
 
     try:
@@ -51,13 +51,13 @@ class LoginView(View):
       email    = data['email']
       password = data['password']
       
-      if User.objects.filter(email = email, password = password).exists():
-        return JsonResponse({'message':'SUCCESS'}, status = 200)
+      if not User.objects.filter(email = email).exists():
+        return JsonResponse({'message':'INVALED_USER'}, status = 401)
 
-      elif User.objects.filter(email = email).exists():
+      if not User.objects.filter(password = password).exists():
         return JsonResponse({'message':'INCORRECT_PASSWORD'}, status = 401)
 
-      return JsonResponse({'message':'INVALID_USER'}, status = 401) 
+      return JsonResponse({'message':'SUCCESS'}, status = 200) 
 
     except KeyError:
       return JsonResponse({'message':'KEY_ERROR'}, status = 400)
