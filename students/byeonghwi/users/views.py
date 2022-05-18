@@ -1,8 +1,8 @@
 import json
 import re
+
 from django.http import JsonResponse
 from django.views import View
-
 from users.models import User
 
 
@@ -36,10 +36,10 @@ class UsersView(View):
         phone    = phone,
       )
 
-      return JsonResponse({'message': 'success'}, status = 201)
+      return JsonResponse({'message': 'SUCCESS'}, status = 201)
 
     except KeyError:
-      return JsonResponse({'message': 'key_error'}, status = 400)
+      return JsonResponse({'message': 'KEY_ERROR'}, status = 400)
 
 
 class LoginView(View):
@@ -50,10 +50,10 @@ class LoginView(View):
       password = data['password']
       
       if User.objects.filter(email = email, password = password).exists():
-        return JsonResponse({'message':'success_login'}, status = 200)
+        return JsonResponse({'message':'SUCCESS'}, status = 200)
       elif User.objects.filter(email = email).exists():
-        return JsonResponse({'message':'incorrect_password'}, status = 400)
+        return JsonResponse({'message':'INCORRECT_PASSWORD'}, status = 401)
       else:
-        return JsonResponse({'message':'invalid_user'}, status = 400) 
+        return JsonResponse({'message':'INVALID_USER'}, status = 401) 
     except KeyError:
-      return JsonResponse({'message':'key_error'}, status = 400)
+      return JsonResponse({'message':'KEY_ERROR'}, status = 400)
