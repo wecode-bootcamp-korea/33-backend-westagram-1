@@ -1,7 +1,7 @@
 from django.urls import path
 
-# from .views import SignupView, LoginView
+from .views import PostingView
 
 urlpatterns = [
- 
+    path("/post", PostingView.as_view()),
 ]
