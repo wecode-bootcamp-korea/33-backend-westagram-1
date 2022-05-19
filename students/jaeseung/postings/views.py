@@ -37,10 +37,10 @@ class PostView(View):
     @signin_decorator
     def get(self, request):
         post_list = [{
-            'username' : User.objects.get(id = post.user.id).name,
-            'content' : post.content,
-            'images' : [image.image_url for image in post.image_set.all()],
-            'created_at' : post.created_at
+            'username'  : User.objects.get(id = post.user.id).name,
+            'content'   : post.content,
+            'images'    : [image.image_url for image in post.image_set.all()],
+            'created_at': post.created_at
 
         } for post in Post.objects.all()
         ]
