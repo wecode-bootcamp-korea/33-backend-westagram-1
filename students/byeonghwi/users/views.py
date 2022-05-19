@@ -1,5 +1,6 @@
 import json
 import re
+import bcrypt
 
 from django.http import JsonResponse
 from django.views import View
@@ -28,11 +29,13 @@ class UsersView(View):
 
       if User.objects.filter(phone = phone).exists():
         return JsonResponse({'message': 'duplicated_phone'}, status = 400)
+      
+      hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
       User.objects.create(
         name     = name,
         email    = email,
-        password = password,
+        password = hashed_password,
         phone    = phone,
       )
 
