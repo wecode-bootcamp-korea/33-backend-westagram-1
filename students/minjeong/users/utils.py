@@ -20,6 +20,5 @@ def jwt_expression(func):
 
         except User.DoesNotExist:
             return JsonResponse({"message" : "INVALID_ID"}, status=400)
-        
 
     return get_token

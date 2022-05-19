@@ -7,7 +7,6 @@ class Post(models.Model):
     registered_date     = models.DateTimeField(auto_now_add=True)
     updated_at          = models.DateTimeField(auto_now=True)
     top_fixed           = models.BooleanField(default=False)
-    # like                = models.ForeignKey('Like', on_delete=models.CASCADE)
 
 class Comment(models.Model):
     comment_writer      = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='comment')
@@ -20,11 +19,6 @@ class Comment(models.Model):
 class File(models.Model):
     post_file           = models.ForeignKey('Post', on_delete=models.CASCADE)
     upload_files        = models.FileField(upload_to="images/", blank=True)
-
-# class PostLike(models.Model):
-#     user = models.ForeignKey('signup.User', on_delete=models.CASCADE)
-#     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-# comment_like = models.BooleanField(default=1)
     
 class CommentLike(models.Model):
     user         = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="commentlike")

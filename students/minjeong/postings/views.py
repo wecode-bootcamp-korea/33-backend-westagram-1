@@ -17,9 +17,6 @@ class PostingView(View):
             #한장의 이미지가 하나의 키값에 존재할 때 __getitem__
             top_fixed       = request.POST["top_fixed"]
             writer_id       = request.user
-            # writer_id       = request.POST["writer_id"]
-            #원레는 request.user가 들어가야 하는데... 음...
-            #request.user
             
             Post.objects.create(
                 title           = title,
@@ -34,8 +31,6 @@ class PostingView(View):
                     post_file_id = Post.objects.get(title=title).id
                 )
 
-        
-
             return JsonResponse({"message" : "SUCCESS"}, status=200)
 
         except KeyError :
@@ -44,19 +39,17 @@ class PostingView(View):
     def get(self, request):
         try:
             
-            results=[]
-            
-            posts = Post.objects.all()
+            results = []
+            posts   = Post.objects.all()
+
             for post in posts:
                 comments=[]
-                # 
                 results.append({
-                    '아이디':post.id,
-                    '제목': post.title,
-                    '내용': post.posting_content,
-                    '등록일': post.registered_date,
+                    '아이디' : post.id,
+                    '제목'  : post.title,
+                    '내용'  : post.posting_content,
+                    '등록일' : post.registered_date,
                     '상위고정': post.top_fixed,
-                    # '관련 댓글': comments
                 })
 
             return JsonResponse({"message" : results}, status=200)
@@ -78,7 +71,7 @@ class PostingDetailView(View):
                 '내용'  : present_post.posting_content,
                 '등록일' : present_post.registered_date,
                 '상위고정': present_post.top_fixed,
-                '댓글'   : comments
+                '댓글'  : comments
             })
             return JsonResponse({"message" : results}, status=200)
         except KeyError :
@@ -87,15 +80,15 @@ class PostingDetailView(View):
     @jwt_expression
     def post(self, request, id): 
         try:
-            data        = json.loads(request.body)
+            data = json.loads(request.body)
 
             comment_writer  = request.user
             comment_content = data["comment_content"]
             posting_comment = Post.objects.get(id=id).id
 
             Comment.objects.create(
-                comment_writer_id = comment_writer,
-                comment_content = comment_content,
+                comment_writer_id  = comment_writer,
+                comment_content    = comment_content,
                 posting_comment_id = posting_comment
             )
             return JsonResponse({"message" : "SUCCESS"}, status=200)
