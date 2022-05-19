@@ -45,4 +45,4 @@ class PostView(View):
         } for post in Post.objects.all()
         ]
 
-        return JsonResponse({'DATA' : post_list}, status=200)
+        return JsonResponse({'RESULT' : post_list}, status=200)
