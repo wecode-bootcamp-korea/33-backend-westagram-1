@@ -1,12 +1,10 @@
-import json
-import re
-import bcrypt
-import jwt
+import json, re, bcrypt, jwt
 
 from django.http import JsonResponse
 from django.views import View
-from users.models import User
 from django.conf import settings
+
+from users.models import User
 
 
 class UsersView(View):
