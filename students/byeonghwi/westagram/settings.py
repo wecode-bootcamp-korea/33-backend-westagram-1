@@ -1,11 +1,13 @@
 from pathlib import Path
-from my_settings import DATABASES, SECRET_KEY
+from my_settings import DATABASES, SECRET_KEY, ALGORITHM
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASES = DATABASES
 
 SECRET_KEY = SECRET_KEY
+
+ALGORITHM = ALGORITHM
 
 DEBUG = True
 
@@ -118,3 +120,4 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',    		
 )
+
